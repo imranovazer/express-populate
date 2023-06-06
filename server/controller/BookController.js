@@ -1,102 +1,105 @@
-const Book =require('../model/Book') ;
+const Book = require('../model/Book');
 
 
 const { v4: uuidv4 } = require('uuid')
 var fs = require('fs');
 
-exports.getAllBooks=async(req,res)=>
-{
+exports.getAllBooks = async (req, res) => {
     try {
-        const data  = await Book.find().populate("writer") ;
+        const data = await Book.find().populate("writer");
         res.status(201).json({
-            status:"success",
+            status: "success",
             data
         })
-        
+
     } catch (error) {
         res.status(400).json({
-            status:"fail",
+            status: "fail",
             error
         })
-        
+
     }
-    
+
 }
-exports.getOneBook=async(req,res)=>
-{
+exports.getOneBook = async (req, res) => {
     try {
-        const data  = await Book.findById(req.params.id).populate("writer") ;
+        const data = await Book.findById(req.params.id).populate("writer");
         res.status(201).json({
-            status:"success",
+            status: "success",
             data
         })
-        
+
     } catch (error) {
         res.status(400).json({
-            status:"fail",
+            status: "fail",
             error
         })
-        
+
     }
-    
+
 }
-exports.deleteBook=async(req,res)=>
-{
+exports.deleteBook = async (req, res) => {
     try {
-        const data  = await Book.findByIdAndDelete(req.params.id) ;
+        const data = await Book.findByIdAndDelete(req.params.id);
+        fs.unlink(data.imagePath, function (err) {
+            if (err) {
+                console.log(err)
+            }
+        })
+
         res.status(201).json({
-            status:"success",
+            status: "success",
             data
         })
-        
+
     } catch (error) {
         res.status(400).json({
-            status:"fail",
+            status: "fail",
             error
         })
-        
+
     }
-    
+
 }
-exports.createBook =  async(req, res) => {
+exports.createBook = async (req, res) => {
 
     try {
         console.log(req.files)
         let file = req.files.photo;
         let fileExt = file.name.substring(file.name.lastIndexOf('.'))
-        uploadPath = __dirname + '/../images/' + uuidv4()+fileExt
-       
+        uploadPath = __dirname + '/../images/' + uuidv4() + fileExt
+
         file.mv(uploadPath, function (err) {
 
 
             console.log(err)
-    
+
         })
         const newBook = {
-            name:req.body.name ,
-            description:req.body.description ,
-            imagePath : uploadPath ,
-            writer:req.body.writer 
+            name: req.body.name,
+            description: req.body.description,
+            imagePath: uploadPath,
+            writer: req.body.writer
         }
-        const data  = await Book.create(newBook) ;
+        const data = await Book.create(newBook);
         res.status(201).json({
-            status:"success",
+            status: "success",
             data
         })
-        
+
     } catch (error) {
         res.status(400).json({
-            status:"fail",
+            status: "fail",
             error
         })
-        
+
     }
 
-   
 
-  
 
-    
+
+
+
 
 }
 
