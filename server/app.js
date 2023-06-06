@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const fileUpload = require("express-fileupload") ;
-const cors = rquire('cors') ;
+const fileUpload = require("express-fileupload");
+const cors = require('cors');
 
 const app = express();
 
@@ -18,9 +18,9 @@ app.use(fileUpload())
 const port = 8080;
 
 
-app.use('/api/writers' ,WriterRoutes) ;
-app.use('/api/countries',CountryRoutes)
-app.use('/api/books',BookRoutes) ;
+app.use('/api/writers', WriterRoutes);
+app.use('/api/countries', CountryRoutes)
+app.use('/api/books', BookRoutes);
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
